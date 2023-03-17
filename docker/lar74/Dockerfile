@@ -19,12 +19,17 @@ RUN apt-get update \
     && pecl install mcrypt-1.0.4 \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-# DO NOT install php7.4-xdebug package for site running in production! It will slow it down significantly.
+# Sendmail
+RUN apt-get update &&\
+    apt-get install --no-install-recommends --assume-yes --quiet ca-certificates curl git &&\
+    rm -rf /var/lib/apt/lists/*
+RUN curl -Lsf 'https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz' | tar -C '/usr/local' -xvzf -
+ENV PATH /usr/local/go/bin:$PATH
+RUN go get github.com/mailhog/mhsendmail
+RUN cp /root/go/bin/mhsendmail /usr/bin/mhsendmail
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-
-# RUN composer install
 
 COPY ./php.ini /etc/php/7.4/fpm/conf.d/90-php.ini
 COPY ./php.ini /etc/php/7.4/cli/conf.d/90-php.ini

@@ -27,6 +27,9 @@ ENV PATH /usr/local/go/bin:$PATH
 RUN go get github.com/mailhog/mhsendmail
 RUN cp /root/go/bin/mhsendmail /usr/bin/mhsendmail
 
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
 COPY ./php.ini /etc/php/8.1/fpm/conf.d/90-php.ini
 COPY ./php.ini /etc/php/8.1/cli/conf.d/90-php.ini
 

@@ -2,16 +2,12 @@ version: '3'
 
 services:
   php:
-    # img-74_php, 
     image: lar74-php:latest
     volumes:
       - './www:/var/www/html'
-    # для использования localhost локальной машины
-    # network_mode: "host"
     restart: always
   nginx:
     image: nginx:latest
-    container_name: laravelNX
     ports:
       - 80:80
     volumes:
@@ -19,7 +15,6 @@ services:
       - './docker/nginx/conf.d:/etc/nginx/conf.d'
   mysql:
     image: mysql:8
-    container_name: mysql
     volumes:
       - './data/mysql:/var/lib/mysql'
       - './docker/mysql:/etc/mysql/conf.d'
